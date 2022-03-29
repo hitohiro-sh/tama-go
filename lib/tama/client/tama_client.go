@@ -57,7 +57,7 @@ func (client *ApiClient) Wait() {
 
 func (client *ApiClient) Send(id, data string) {
 	writer := client.writer
-	obj, err := json.Marshal(id)
+	obj, err := json.Marshal([]string{id, data})
 	if err == nil {
 		fmt.Fprint(writer, fmt.Sprintf("%s\n", obj))
 	}
