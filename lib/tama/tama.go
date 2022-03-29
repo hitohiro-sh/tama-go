@@ -23,8 +23,8 @@
 package tama
 
 import (
+	"bufio"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 )
@@ -51,13 +51,18 @@ func (api *Api) Run() {
 			f(v)
 		}
 	}
+	reader := bufio.NewReader(api.reader)
 
 	for {
-		var buf string
-		fmt.Fscanln(api.reader, &buf)
-
+		buf, err := reader.ReadString('\n')
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
 		var inst []string
-		err := json.Unmarshal([]byte(buf), &inst)
+		err = json.Unmarshal([]byte(buf), &inst)
 		if err != nil {
 			log.Fatal(err)
 		}
